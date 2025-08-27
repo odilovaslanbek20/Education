@@ -22,6 +22,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
+import Link from 'next/link'
 
 export function Register() {
 	const { t } = useTranslation()
@@ -137,7 +138,9 @@ export function Register() {
 					<Button variant='outline' className='flex-1 sm:flex-none'>
 						{t('signUp')}
 					</Button>
-					<Button className='flex-1 sm:flex-none'>{t('signIn')}</Button>
+					<Button className='flex-1 sm:flex-none'>
+						<Link href='/login'>{t('signIn')}</Link>
+					</Button>
 				</div>
 
 				<div className='flex items-center gap-3 sm:gap-4 sm:absolute sm:top-3 sm:right-4'>
