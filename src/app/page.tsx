@@ -1,12 +1,16 @@
-import AuthLayout from './(auth)/layout'
-import { Register } from './(auth)/register/page'
+// import AuthLayout from './(auth)/layout'
+// import LoginPage from './(auth)/login/page'
+
+import Navbar from '@/components/Header/Navbar'
 
 export default function Home() {
 	return (
 		<>
-			<AuthLayout>
-				<Register />
-			</AuthLayout>
+			{/* <AuthLayout>
+				<LoginPage />
+			</AuthLayout> */}
+
+      <Navbar/>
 		</>
 	)
 }

@@ -22,5 +22,8 @@
 	"password": "Password",
 	"role": "Role",
 	"image": "Image",
-	"formbtn": "Submit"
+	"formbtn": "Submit",
+	"nice": "Registration was successful...",
+	"error_API": "An error occurred! Please try again.",
+	"loading": "Loading..."
 }

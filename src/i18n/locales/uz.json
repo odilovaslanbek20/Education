@@ -22,5 +22,8 @@
 	"password": "Parol",
 	"role": "Rol",
 	"image": "Rasm",
-	"formbtn": "Yuborish"
+	"formbtn": "Yuborish",
+	"nice": "Ro'yxatdan muvafaqiyatli o'tildi...",
+	"error_API": "Xatolik yuz berdi! Qaytadan urinib ko‘ring.",
+	"loading": "Yuklanmoqda..."
 }

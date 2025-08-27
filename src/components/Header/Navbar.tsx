@@ -1,12 +1,18 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useTranslation } from '@/context/TranslationContext'
 import LanguageSwitcher from '@/i18n/Language'
 import Link from 'next/link'
 import { AnimatedThemeToggler } from '../magicui/animated-theme-toggler'
 import { RainbowButton } from '../magicui/rainbow-button'
 import CeoPanelNav from './CeoPanelNav'
-import { HiOutlineBuildingLibrary, HiOutlinePlusCircle } from 'react-icons/hi2'
+import {
+	HiOutlineBuildingLibrary,
+	HiOutlinePlusCircle,
+	HiBars3,
+	HiXMark,
+} from 'react-icons/hi2'
 
 const navigation = [
 	{ name: 'home', href: '/' },
@@ -19,47 +25,155 @@ const authNavigation = [{ name: 'queue', href: '/queue' }]
 const ceoPanelNavigation = [{ name: 'Ceo' }]
 
 const ceoNavigation = [
-	{ name: 'ceoEdu', href: '/myEdu', icons: <HiOutlineBuildingLibrary className='text-lg'/> },
-	{ name: 'ceoNewEdu', href: '/createEdu', icons: <HiOutlinePlusCircle className='text-lg'/> },
+	{
+		name: 'ceoEdu',
+		href: '/myEdu',
+		icons: <HiOutlineBuildingLibrary className='text-lg' />,
+	},
+	{
+		name: 'ceoNewEdu',
+		href: '/createEdu',
+		icons: <HiOutlinePlusCircle className='text-lg' />,
+	},
 ]
 
 export default function Navbar() {
 	const { t } = useTranslation()
+	const [open, setOpen] = useState<boolean>(false)
+	const [width, setWidth] = useState<number>(
+		typeof window !== 'undefined' ? window.innerWidth : 0
+	)
+	const [mobileMenu, setMobileMenu] = useState(false)
+
+	useEffect(() => {
+		const handleResize = () => setWidth(window.innerWidth)
+		window.addEventListener('resize', handleResize)
+
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
+	useEffect(() => {
+		if (width < 1024) {
+			setMobileMenu(true)
+		} else {
+			setMobileMenu(false)
+		}
+	}, [width])
+
 	return (
-		<>
-			<header className='w-full fixed top-0 left-0 z-40 p-3.5 shadow-md border-b'>
-				<div className='top-container flex items-center justify-between'>
-					<Link href='/' className='text-4xl font-bold'>
-						EduSearch
+		<header className='w-full fixed top-0 left-0 z-40 p-3.5 max-[490px]:py-1.5 shadow-md border-b bg-background/80 backdrop-blur-md transition-colors'>
+			<div className='top-container flex items-center justify-between'>
+				<Link href='/' className='text-3xl font-bold max-[350px]:text-2xl'>
+					EduSearch
+				</Link>
+
+				<nav className='hidden lg:flex items-center'>
+					<ul className='flex items-center gap-6'>
+						{navigation.map(item => (
+							<li key={item.href} className='group'>
+								<Link
+									href={item.href}
+									className='text-lg font-medium hover:text-primary transition'
+								>
+									{t(item.name)}
+								</Link>
+								<div className='group-hover:w-full w-0 h-0.5 bg-primary rounded transition-all duration-300'></div>
+							</li>
+						))}
+						{authNavigation.map(item => (
+							<li key={item.href} className='group'>
+								<Link
+									href={item.href}
+									className='text-lg font-medium hover:text-primary transition'
+								>
+									{t(item.name)}
+								</Link>
+								<div className='group-hover:w-full w-0 h-0.5 bg-primary rounded transition-all duration-300'></div>
+							</li>
+						))}
+						<CeoPanelNav
+							ceoPanelNavigation={ceoPanelNavigation}
+							ceoNavigation={ceoNavigation}
+						/>
+					</ul>
+				</nav>
+
+				<div className='flex items-center gap-3'>
+					<LanguageSwitcher />
+					<AnimatedThemeToggler />
+					<Link href='/login' className='cursor-pointer'>
+						<RainbowButton className='max-[490px]:hidden'>
+							{t('signIn')}
+						</RainbowButton>
 					</Link>
-					<nav className='flex items-center'>
-						<ul className='flex items-center gap-6'>
+					<button
+						onClick={() => setOpen(true)}
+						className='lg:hidden p-2 rounded-md hover:bg-muted transition'
+					>
+						<HiBars3 className='text-2xl' />
+					</button>
+				</div>
+			</div>
+
+			{mobileMenu && (
+				<>
+					<div
+						className={`fixed top-0 right-0 h-screen w-[320px] border-l-[1.5px] bg-background/75 backdrop-blur-lg shadow-lg transform transition-transform duration-300 ease-in-out z-50
+        ${open ? 'translate-x-0 shadow-white ' : 'translate-x-full'}`}
+					>
+						<div className='flex items-center justify-between p-4 border-b'>
+							<p className='text-2xl font-bold'>EduSearch</p>
+							<button
+								onClick={() => setOpen(false)}
+								className='p-2 hover:bg-muted rounded-md'
+							>
+								<HiXMark className='text-2xl' />
+							</button>
+						</div>
+						<ul className='flex flex-col items-start p-6 gap-6'>
 							{navigation.map(item => (
-								<li key={item.href} className='group'>
-									<Link href={item.href} className='text-lg font-medium'>
+								<li key={item.href}>
+									<Link
+										href={item.href}
+										onClick={() => setOpen(false)}
+										className='text-lg font-medium hover:text-primary transition'
+									>
 										{t(item.name)}
 									</Link>
-									<div className='group-hover:w-full w-0 h-0.5 rounded-4xl transition-all duration-300'></div>
 								</li>
 							))}
 							{authNavigation.map(item => (
-								<li key={item.href} className='group'>
-									<Link href={item.href} className='text-lg font-medium'>
+								<li key={item.href}>
+									<Link
+										href={item.href}
+										onClick={() => setOpen(false)}
+										className='text-lg font-medium hover:text-primary transition'
+									>
 										{t(item.name)}
 									</Link>
-									<div className='group-hover:w-full w-0 h-0.5 rounded-4xl transition-all duration-300'></div>
 								</li>
 							))}
-							<CeoPanelNav ceoPanelNavigation={ceoPanelNavigation} ceoNavigation={ceoNavigation}/>
+							<CeoPanelNav
+								ceoPanelNavigation={ceoPanelNavigation}
+								ceoNavigation={ceoNavigation}
+							/>
+							<RainbowButton className='w-full min-[490px]:hidden'>
+								<Link href='/login'>{t('signIn')}</Link>
+							</RainbowButton>
+							<div className='w-full text-center border-2 p-1 rounded-[10px]'>
+								<p className='text-[15px] font-bold'>Foydalanuvchining roli:</p>
+								<p className='text-[18px] font-bold'>User</p>
+							</div>
 						</ul>
-					</nav>
-					<div className='flex items-center gap-4'>
-						<LanguageSwitcher />
-						<AnimatedThemeToggler />
-						<RainbowButton>{t('signIn')}</RainbowButton>
 					</div>
-				</div>
-			</header>
-		</>
+					{open && (
+						<div
+							onClick={() => setOpen(false)}
+							className='fixed h-screen inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity'
+						/>
+					)}
+				</>
+			)}
+		</header>
 	)
 }

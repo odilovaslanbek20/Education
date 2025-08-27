@@ -15,10 +15,45 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useTranslation } from '@/context/TranslationContext'
 import LanguageSwitcher from '@/i18n/Language'
+import axios from 'axios'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
-export default function LoginPage() {
+export default function SendOtp() {
+	const apiUrl = process.env.NEXT_PUBLIC_API_URL
+	const [loading, setLoading] = useState<boolean>(false)
 	const { t } = useTranslation()
+	const [email, setEmail] = useState<string>('')
+  
+	useEffect(() => {
+		const email = localStorage.getItem('email')
+		setEmail(email ?? '')
+	}, [])
+
+	const handleSubmit = async (e: React.FormEvent) => {
+     e.preventDefault()
+		 setLoading(true)
+		 
+		 try {
+			const res = await axios.post(`${apiUrl}/users/send-otp`, email, {
+				headers: {
+					Accept: 'application/json',
+				}
+			})
+
+			console.log(res);
+			setLoading(false)
+			toast.success(t('nice'))
+			
+		 } catch (err: unknown) {
+			console.log(err);
+			setLoading(false)
+			toast.error(t('error_API'))
+		 }
+
+	}
+
 	return (
 		<Card className='relative max-w-[600px] w-full max-[768px]:max-w-full max-[768px]:h-screen max-[768px]:rounded-none max-[400px]:px-0'>
 			<CardHeader>
@@ -26,9 +61,9 @@ export default function LoginPage() {
 				<CardDescription>{t('body')}</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<form>
+				<form onSubmit={handleSubmit}>
 					<div className='grid grid-cols-2 w-full items-center gap-4 max-[400px]:gap-2'>
-						<div className='flex flex-col space-y-1.5'>
+						<div className='flex flex-col space-y-1.5 col-span-2'>
 							<Label htmlFor='email' className='max-[400px]:text-[12px]'>
 								{t('email')}
 							</Label>
@@ -37,26 +72,17 @@ export default function LoginPage() {
 								className='max-[400px]:text-[12px]'
 								id='email'
 								type='email'
+								value={email}
 								placeholder={t('email')}
-							/>
-						</div>
-						<div className='flex flex-col space-y-1.5'>
-							<Label htmlFor='password' className='max-[400px]:text-[12px]'>
-								{t('password')}
-							</Label>
-							<Input
-								required
-								className='max-[400px]:text-[12px]'
-								id='password'
-								type='password'
-								placeholder={t('password')}
 							/>
 						</div>
 						<div className='flex flex-col space-y-1.5 col-span-2'>
 							<Label htmlFor='btn' className='opacity-0'>
 								{t('image')}
 							</Label>
-							<Button type='submit' className='cursor-pointer'>{t('formbtn')}</Button>
+							<Button type='submit' disabled={loading}  className='cursor-pointer'>{`${
+								!loading ? t('formbtn') : t('loading')
+							}`}</Button>
 						</div>
 					</div>
 				</form>
