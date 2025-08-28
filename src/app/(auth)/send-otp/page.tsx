@@ -17,6 +17,7 @@ import { useTranslation } from '@/context/TranslationContext'
 import LanguageSwitcher from '@/i18n/Language'
 import axios from 'axios'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -24,6 +25,7 @@ export default function SendOtp() {
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL
 	const [loading, setLoading] = useState<boolean>(false)
 	const { t } = useTranslation()
+	const router = useRouter();
 	const [email, setEmail] = useState<string>('')
   
 	useEffect(() => {
@@ -36,7 +38,7 @@ export default function SendOtp() {
 		 setLoading(true)
 		 
 		 try {
-			const res = await axios.post(`${apiUrl}/users/send-otp`, email, {
+			const res = await axios.post(`${apiUrl}/users/send-otp`, {email: email}, {
 				headers: {
 					Accept: 'application/json',
 				}
@@ -45,7 +47,8 @@ export default function SendOtp() {
 			console.log(res);
 			setLoading(false)
 			toast.success(t('nice'))
-			
+			JSON.stringify(localStorage.setItem('otp', res.data.otp))
+      router.push('/verify-otp')
 		 } catch (err: unknown) {
 			console.log(err);
 			setLoading(false)
