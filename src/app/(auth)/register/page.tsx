@@ -26,9 +26,11 @@ import Link from 'next/link'
 import { useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
 	const { t } = useTranslation()
+	const router = useRouter();
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL
 	const [loading, setLoading] = useState<boolean>(false)
 	const [name, setName] = useState<string>('')
@@ -82,6 +84,7 @@ export default function RegisterPage() {
 			setLoading(false)
 			toast.success(t('nice'))
 			JSON.stringify(localStorage.setItem('email', email))
+			router.push('/send-otp')
 		} catch (err: unknown) {
 			console.error('Register error:', err)
 			setLoading(false)

@@ -44,6 +44,7 @@ export default function Navbar() {
 		typeof window !== 'undefined' ? window.innerWidth : 0
 	)
 	const [mobileMenu, setMobileMenu] = useState(false)
+	const [token, setToken] = useState('')
 
 	useEffect(() => {
 		const handleResize = () => setWidth(window.innerWidth)
@@ -59,6 +60,13 @@ export default function Navbar() {
 			setMobileMenu(false)
 		}
 	}, [width])
+
+	useEffect(() => {
+		const accessToken = localStorage.getItem('accessToken')
+		if (accessToken) {
+			setToken(accessToken)
+		}
+	}, [])
 
 	return (
 		<header className='w-full fixed top-0 left-0 z-40 p-3.5 max-[490px]:py-1.5 shadow-md border-b bg-background/80 backdrop-blur-md transition-colors'>
@@ -101,11 +109,21 @@ export default function Navbar() {
 				<div className='flex items-center gap-3'>
 					<LanguageSwitcher />
 					<AnimatedThemeToggler />
-					<Link href='/login' className='cursor-pointer'>
-						<RainbowButton className='max-[490px]:hidden'>
-							{t('signIn')}
-						</RainbowButton>
-					</Link>
+					{!token ? (
+						<>
+							<Link href='/login' className='cursor-pointer'>
+								<RainbowButton className='max-[490px]:hidden'>
+									{t('signIn')}
+								</RainbowButton>
+							</Link>
+						</>
+					) : (
+						<>
+						 <div className="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center">
+							OA
+						 </div>
+						</>
+					)}
 					<button
 						onClick={() => setOpen(true)}
 						className='lg:hidden p-2 rounded-md hover:bg-muted transition'

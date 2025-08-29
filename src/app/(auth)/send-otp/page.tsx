@@ -25,36 +25,41 @@ export default function SendOtp() {
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL
 	const [loading, setLoading] = useState<boolean>(false)
 	const { t } = useTranslation()
-	const router = useRouter();
+	const router = useRouter()
 	const [email, setEmail] = useState<string>('')
-  
+
 	useEffect(() => {
 		const email = localStorage.getItem('email')
-		setEmail(email ?? '')
+		if (email) {
+			setEmail(email)
+		}
 	}, [])
 
 	const handleSubmit = async (e: React.FormEvent) => {
-     e.preventDefault()
-		 setLoading(true)
-		 
-		 try {
-			const res = await axios.post(`${apiUrl}/users/send-otp`, {email: email}, {
-				headers: {
-					Accept: 'application/json',
-				}
-			})
+		e.preventDefault()
+		setLoading(true)
 
-			console.log(res);
+		try {
+			const res = await axios.post(
+				`${apiUrl}/users/send-otp`,
+				{ email },
+				{
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			)
+
+			console.log(res)
 			setLoading(false)
 			toast.success(t('nice'))
 			JSON.stringify(localStorage.setItem('otp', res.data.otp))
-      router.push('/verify-otp')
-		 } catch (err: unknown) {
-			console.log(err);
+			router.push('/verify-otp')
+		} catch (err: unknown) {
+			console.log(err)
 			setLoading(false)
 			toast.error(t('error_API'))
-		 }
-
+		}
 	}
 
 	return (
@@ -76,6 +81,7 @@ export default function SendOtp() {
 								id='email'
 								type='email'
 								value={email}
+								onChange={e => setEmail(e.target.value)}
 								placeholder={t('email')}
 							/>
 						</div>
@@ -83,9 +89,11 @@ export default function SendOtp() {
 							<Label htmlFor='btn' className='opacity-0'>
 								{t('image')}
 							</Label>
-							<Button type='submit' disabled={loading}  className='cursor-pointer'>{`${
-								!loading ? t('formbtn') : t('loading')
-							}`}</Button>
+							<Button
+								type='submit'
+								disabled={loading}
+								className='cursor-pointer'
+							>{`${!loading ? t('formbtn') : t('loading')}`}</Button>
 						</div>
 					</div>
 				</form>
@@ -93,12 +101,17 @@ export default function SendOtp() {
 			<CardFooter className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 relative'>
 				<div className='flex gap-2 w-full sm:w-auto'>
 					<Link href='/register'>
-						<Button variant='outline' className='flex-1 sm:flex-none cursor-pointer'>
+						<Button
+							variant='outline'
+							className='flex-1 sm:flex-none cursor-pointer'
+						>
 							{t('signUp')}
 						</Button>
 					</Link>
 					<Link href='/login'>
-						<Button className='flex-1 sm:flex-none cursor-pointer'>{t('signIn')}</Button>
+						<Button className='flex-1 sm:flex-none cursor-pointer'>
+							{t('signIn')}
+						</Button>
 					</Link>
 				</div>
 
