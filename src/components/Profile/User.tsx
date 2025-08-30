@@ -49,7 +49,7 @@ export function Admen() {
 							</p>
 						</div>
 					</DropdownMenuItem>
-					<Link href='/dashboard/editprofile'>
+					<Link href='/dashboard/profiledit'>
 						<DropdownMenuItem className='cursor-pointer'>
 							<MdEdit className='text-2xl' />
 							{t('edit')}

@@ -1,6 +1,6 @@
 import EditUser from '@/components/Profile/EditProfile'
 
-export default function EditProfile() {
+export default function Edit() {
 	return (
 		<>
 		 <EditUser/>
