@@ -10,6 +10,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'findcourse.net.uz',
+        pathname: '/**',
       },
     ],
   },

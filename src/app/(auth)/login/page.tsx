@@ -32,6 +32,11 @@ export default function LoginPage() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 
+		if (!apiUrl) {
+			toast.error(t('error_url'))
+			return
+		}
+
 		try {
 			const res = await axios.post(
 				`${apiUrl}/users/login`,
