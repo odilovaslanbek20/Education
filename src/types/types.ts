@@ -27,7 +27,7 @@ export interface User {
   email: string
   phone: string
   role: string
-  image: string | null
+  image: string
   isActive: boolean
   createdAt: string
   updatedAt: string
