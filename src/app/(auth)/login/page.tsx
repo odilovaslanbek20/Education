@@ -20,6 +20,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
 export default function LoginPage() {
 	const { t } = useTranslation()
@@ -29,29 +30,41 @@ export default function LoginPage() {
 	const [password, setPassword] = useState<string>('')
 
 	const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
+		e.preventDefault()
 
-  try {
-    const res = await axios.post(`${apiUrl}/users/login`, {
-      email,
-      password,
-    }, {
-      headers: { "Content-Type": "application/json" },
-    })
+		try {
+			const res = await axios.post(
+				`${apiUrl}/users/login`,
+				{
+					email,
+					password,
+				},
+				{
+					headers: { 'Content-Type': 'application/json' },
+				}
+			)
 
-		if (res.status === 200) {
-			JSON.stringify(localStorage.setItem('accessToken', res.data.accessToken))
-			JSON.stringify(localStorage.setItem('refreshToken', res.data.refreshToken))
+			if (res.status === 200) {
+				Cookies.set('accessToken', res.data.accessToken, {
+					expires: 7, 
+					secure: true, 
+					sameSite: 'strict',
+				})
+
+				Cookies.set('refreshToken', res.data.refreshToken, {
+					expires: 7,
+					secure: true,
+					sameSite: 'strict',
+				})
+			}
+
+			toast.success(t('nice'))
+			router.push('/dashboard')
+		} catch (err: unknown) {
+			console.log('Login error:', err)
+			toast.error(t('error_API'))
 		}
-
-		toast.error(t('nice'))
-    router.push('/dashboard')
-  } catch (err: unknown) {
-    console.log("Login error:", err)
-		toast.error(t('error_API'))
-  }
-}
-
+	}
 
 	return (
 		<Card className='relative max-w-[600px] w-full max-[768px]:max-w-full max-[768px]:h-screen max-[768px]:rounded-none max-[400px]:px-0'>
@@ -72,7 +85,7 @@ export default function LoginPage() {
 								id='email'
 								type='email'
 								placeholder={t('email')}
-								onChange={(e) => setEmail(e.target.value)}
+								onChange={e => setEmail(e.target.value)}
 							/>
 						</div>
 						<div className='flex flex-col space-y-1.5'>
@@ -85,14 +98,16 @@ export default function LoginPage() {
 								id='password'
 								type='password'
 								placeholder={t('password')}
-								onChange={(e) => setPassword(e.target.value)}
+								onChange={e => setPassword(e.target.value)}
 							/>
 						</div>
 						<div className='flex flex-col space-y-1.5 col-span-2'>
 							<Label htmlFor='btn' className='opacity-0'>
 								{t('image')}
 							</Label>
-							<Button type='submit' className='cursor-pointer'>{t('formbtn')}</Button>
+							<Button type='submit' className='cursor-pointer'>
+								{t('formbtn')}
+							</Button>
 						</div>
 					</div>
 				</form>
@@ -100,12 +115,17 @@ export default function LoginPage() {
 			<CardFooter className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 relative'>
 				<div className='flex gap-2 w-full sm:w-auto'>
 					<Link href='/register'>
-						<Button variant='outline' className='flex-1 sm:flex-none cursor-pointer'>
+						<Button
+							variant='outline'
+							className='flex-1 sm:flex-none cursor-pointer'
+						>
 							{t('signUp')}
 						</Button>
 					</Link>
 					<Link href='/login'>
-						<Button className='flex-1 sm:flex-none cursor-pointer'>{t('signIn')}</Button>
+						<Button className='flex-1 sm:flex-none cursor-pointer'>
+							{t('signIn')}
+						</Button>
 					</Link>
 				</div>
 

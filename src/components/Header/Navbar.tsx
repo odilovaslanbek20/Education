@@ -13,6 +13,8 @@ import {
 	HiBars3,
 	HiXMark,
 } from 'react-icons/hi2'
+import { Admen } from '../Profile/User'
+import { VideoText } from '../magicui/video-text'
 
 const navigation = [
 	{ name: 'home', href: '/' },
@@ -37,14 +39,18 @@ const ceoNavigation = [
 	},
 ]
 
-export default function Navbar() {
+interface TokenType {
+	token: string | undefined
+}
+
+export default function Navbar({ token }: TokenType) {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState<boolean>(false)
 	const [width, setWidth] = useState<number>(
 		typeof window !== 'undefined' ? window.innerWidth : 0
 	)
 	const [mobileMenu, setMobileMenu] = useState(false)
-	const [token, setToken] = useState('')
+	const [logo, setLogo] = useState(false)
 
 	useEffect(() => {
 		const handleResize = () => setWidth(window.innerWidth)
@@ -62,17 +68,25 @@ export default function Navbar() {
 	}, [width])
 
 	useEffect(() => {
-		const accessToken = localStorage.getItem('accessToken')
-		if (accessToken) {
-			setToken(accessToken)
+		if (width < 400) {
+			setLogo(true)
+		} else {
+			setLogo(false)
 		}
-	}, [])
+	}, [width])
 
 	return (
 		<header className='w-full fixed top-0 left-0 z-40 p-3.5 max-[490px]:py-1.5 shadow-md border-b bg-background/80 backdrop-blur-md transition-colors'>
 			<div className='top-container flex items-center justify-between'>
-				<Link href='/' className='text-3xl font-bold max-[350px]:text-2xl'>
-					EduSearch
+				<Link href='/'>
+					<div className='relative h-[40px] w-[200px] max-[768px]:w-[150px] flex items-center justify-start max-[400px]:ml-[-45px]'>
+						<VideoText
+							src='https://cdn.magicui.design/ocean-small.webm'
+							className='text-3xl w-full text-left'
+						>
+							{logo ? 'Edu' : 'EduSearch'}
+						</VideoText>
+					</div>
 				</Link>
 
 				<nav className='hidden lg:flex items-center'>
@@ -88,21 +102,35 @@ export default function Navbar() {
 								<div className='group-hover:w-full w-0 h-0.5 bg-primary rounded transition-all duration-300'></div>
 							</li>
 						))}
-						{authNavigation.map(item => (
-							<li key={item.href} className='group'>
-								<Link
-									href={item.href}
-									className='text-lg font-medium hover:text-primary transition'
-								>
-									{t(item.name)}
-								</Link>
-								<div className='group-hover:w-full w-0 h-0.5 bg-primary rounded transition-all duration-300'></div>
-							</li>
-						))}
-						<CeoPanelNav
-							ceoPanelNavigation={ceoPanelNavigation}
-							ceoNavigation={ceoNavigation}
-						/>
+
+						{token ? (
+							<>
+								{authNavigation.map(item => (
+									<li key={item.href} className='group'>
+										<Link
+											href={item.href}
+											className='text-lg font-medium hover:text-primary transition'
+										>
+											{t(item.name)}
+										</Link>
+										<div className='group-hover:w-full w-0 h-0.5 bg-primary rounded transition-all duration-300'></div>
+									</li>
+								))}
+							</>
+						) : (
+							<></>
+						)}
+
+						{token ? (
+							<>
+								<CeoPanelNav
+									ceoPanelNavigation={ceoPanelNavigation}
+									ceoNavigation={ceoNavigation}
+								/>
+							</>
+						) : (
+							<></>
+						)}
 					</ul>
 				</nav>
 
@@ -119,9 +147,7 @@ export default function Navbar() {
 						</>
 					) : (
 						<>
-						 <div className="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center">
-							OA
-						 </div>
+							<Admen />
 						</>
 					)}
 					<button
@@ -171,13 +197,29 @@ export default function Navbar() {
 									</Link>
 								</li>
 							))}
-							<CeoPanelNav
-								ceoPanelNavigation={ceoPanelNavigation}
-								ceoNavigation={ceoNavigation}
-							/>
-							<RainbowButton className='w-full min-[490px]:hidden'>
-								<Link href='/login'>{t('signIn')}</Link>
-							</RainbowButton>
+
+							{token ? (
+								<>
+									<CeoPanelNav
+										ceoPanelNavigation={ceoPanelNavigation}
+										ceoNavigation={ceoNavigation}
+									/>
+								</>
+							) : (
+								<></>
+							)}
+
+							{!token ? (
+								<>
+									<Link href='/login' className='w-full'>
+										<RainbowButton className='w-full min-[490px]:hidden'>
+											{t('signIn')}
+										</RainbowButton>
+									</Link>
+								</>
+							) : (
+								<></>
+							)}
 							<div className='w-full text-center border-2 p-1 rounded-[10px]'>
 								<p className='text-[15px] font-bold'>Foydalanuvchining roli:</p>
 								<p className='text-[18px] font-bold'>User</p>

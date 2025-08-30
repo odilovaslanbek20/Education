@@ -25,5 +25,7 @@
 	"formbtn": "Yuborish",
 	"nice": "Ro'yxatdan muvafaqiyatli o'tildi...",
 	"error_API": "Xatolik yuz berdi! Qaytadan urinib ko‘ring.",
-	"loading": "Yuklanmoqda..."
+	"loading": "Yuklanmoqda...",
+	"edit": "Yangilash",
+	"my_account": "Mening akkauntim"
 }

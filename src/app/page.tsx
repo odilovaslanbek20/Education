@@ -1,32 +1,25 @@
-'use client'
+import { cookies } from "next/headers"
+import DashboardLayout from "./dashboard/layout"
+import Dashboard from "./dashboard/page"
+import AuthLayout from "./(auth)/layout"
+import LoginPage from "./(auth)/login/page"
 
-import { useEffect, useState } from 'react'
-import AuthLayout from './(auth)/layout'
-import LoginPage from './(auth)/login/page'
-import DashboardLayout from './dashboard/layout'
-import Dashboard from './dashboard/home/page'
+export default async function Home() {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("accessToken")?.value
+	console.log(token);
 
-export default function Home() {
-	const [token, setToken] = useState('')
-
-	useEffect(() => {
-		const accessToken = localStorage.getItem('accessToken')
-		if (accessToken) {
-			setToken(accessToken)
-		}
-	}, [])
-
-	if (token) {
-		return (
-			<DashboardLayout>
-				<Dashboard/>
-			</DashboardLayout>
-		)
-	} else {
-		return (
-			<AuthLayout>
-				<LoginPage />
-			</AuthLayout>
-		)
-	}
+  if (token) {
+    return (
+      <DashboardLayout>
+        <Dashboard />
+      </DashboardLayout>
+    )
+  } else {
+    return (
+      <AuthLayout>
+        <LoginPage />
+      </AuthLayout>
+    )
+  }
 }
