@@ -27,5 +27,9 @@
 	"error_API": "An error occurred! Please try again.",
 	"loading": "Loading...",
 	"edit": "Edit",
-	"my_account": "Мy account"
+	"my_account": "Мy account",
+	"delete_title": "Delete account",
+	"delete": "Delete",
+	"create": "Create",
+	"update": "Update"
 }

@@ -27,5 +27,9 @@
 	"error_API": "Xatolik yuz berdi! Qaytadan urinib ko‘ring.",
 	"loading": "Yuklanmoqda...",
 	"edit": "Yangilash",
-	"my_account": "Mening akkauntim"
+	"my_account": "Mening akkauntim",
+	"delete_title": "Hisobni o‘chirish",
+	"delete": "O‘chirish",
+	"create": "Yaratish",
+	"update": "Yangilash"
 }

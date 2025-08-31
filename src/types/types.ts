@@ -1,26 +1,4 @@
-export interface User {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  role: string
-  password: string
-  image: string
-  isActive: boolean
-  createdAt: string
-  updatedAt: string
-  comments: []
-  likes: []
-  resources: []
-  receptions: []
-}
-
-export interface ApiResponse {
-  data: User
-}
-
-export interface User {
+export interface User1 {
   id: number
   firstName: string
   lastName: string
@@ -76,7 +54,7 @@ export interface Comment {
   centerId: number
   createdAt: string
   updatedAt: string
-  user: User
+  user: User1
 }
 
 export interface Reception {
@@ -101,7 +79,7 @@ export interface Center {
   image: string
   createdAt: string
   updatedAt: string
-  user: User
+  user: User1
   majors: Major[]
   region: Region
   filials: Filial[]
@@ -113,4 +91,20 @@ export interface Center {
 export interface CentersResponse {
   data: Center[]
   total: number
+}
+
+interface MyData {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  role: string
+  image: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface DataMy {
+  data: MyData
 }
