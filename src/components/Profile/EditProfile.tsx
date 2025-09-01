@@ -27,7 +27,8 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-// import { format } from 'date-fns'
+import { useRouter } from 'next/navigation'
+import Cookies from "js-cookie";
 
 interface DataType {
 	data: DataMy
@@ -43,7 +44,7 @@ export default function EditUser({ data, token }: DataType) {
 	const [lastName, setLastName] = useState<string>(data?.data?.lastName)
 	const [phone, setPhone] = useState<string>(data?.data?.phone)
 	const [images, setImage] = useState<File | null>(null)
-	console.log(data)
+	const router = useRouter()
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files && e.target.files.length > 0) {
@@ -122,6 +123,25 @@ export default function EditUser({ data, token }: DataType) {
 		}
 	}
 
+	const deleteUser = async () => {
+		try {
+			await axios.delete(`${apiUrl}/users/${data?.data?.id}`, {
+        headers: {
+          Accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+			toast.success(t('nice'))
+			Cookies.remove('accessToken')
+			Cookies.remove('refreshToken')
+			router.push('/')
+		} catch (err: unknown) {
+			console.log(err)
+			toast.error(t('error_API'))
+		}
+	}
+
 	return (
 		<section>
 			<div className='web-container py-6'>
@@ -175,7 +195,9 @@ export default function EditUser({ data, token }: DataType) {
 									</DialogHeader>
 									<form onSubmit={changePhoto}>
 										<div className='my-1'>
-											<Label htmlFor='image' className='mb-1.5'>{t('image')}</Label>
+											<Label htmlFor='image' className='mb-1.5'>
+												{t('image')}
+											</Label>
 											<Input
 												type='file'
 												name='image'
@@ -183,7 +205,9 @@ export default function EditUser({ data, token }: DataType) {
 												className='mb-4'
 											/>
 										</div>
-										<Button type='submit' className='w-full'>{t('formbtn')}</Button>
+										<Button type='submit' className='w-full'>
+											{t('formbtn')}
+										</Button>
 									</form>
 									<DialogFooter>
 										<Button>Close</Button>
@@ -224,15 +248,12 @@ export default function EditUser({ data, token }: DataType) {
 									<p className='text-sm font-bold text-red-500'>{t('role')}*</p>
 									<p className='text-lg font-medium'>{data?.data?.role}</p>
 								</li>
-								{/* <li>
+								<li>
 									<p className='text-sm font-bold text-red-500'>
 										{t('create')}*
 									</p>
 									<p className='text-lg font-medium'>
-										{format(
-											new Date(data.data.createdAt),
-											'dd/MM/yyyy, HH:mm:ss'
-										)}
+										{new Date(data?.data?.createdAt).toLocaleString()}
 									</p>
 								</li>
 								<li>
@@ -240,11 +261,9 @@ export default function EditUser({ data, token }: DataType) {
 										{t('update')}*
 									</p>
 									<p className='text-lg font-medium'>
-										{data?.data?.updatedAt
-											? new Date(data.data.updatedAt).toLocaleString()
-											: 'N/A'}
+										{new Date(data?.data?.updatedAt).toLocaleString()}
 									</p>
-								</li> */}
+								</li>
 							</ul>
 						</div>
 					</CardContent>
@@ -255,7 +274,10 @@ export default function EditUser({ data, token }: DataType) {
 						<CardTitle className='text-xl font-semibold max-sm:text-center'>
 							{t('delete_title')}
 						</CardTitle>
-						<Button className='gap-1 bg-red-500 hover:bg-red-400 cursor-pointer w-[200px] max-sm:w-full'>
+						<Button
+							onClick={() => deleteUser()}
+							className='gap-1 bg-red-500 hover:bg-red-400 cursor-pointer w-[200px] max-sm:w-full'
+						>
 							<MdDeleteForever className='text-2xl' />
 							{t('delete')}
 						</Button>

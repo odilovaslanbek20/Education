@@ -16,15 +16,17 @@ import { IoMdLogOut } from 'react-icons/io'
 import { MdEdit } from 'react-icons/md'
 import Link from 'next/link'
 import Cookies from "js-cookie";
+import { useRouter } from 'next/navigation'
 
 export function Admen() {
 	const { t } = useTranslation()
 	const [position, setPosition] = React.useState('bottom')
+	const router = useRouter()
 
 	const handleRemove = () => {
     Cookies.remove("accessToken"); 
     Cookies.remove("refreshToken"); 
-		window.location.reload()
+		router.push('/')
   };
 
 	return (
