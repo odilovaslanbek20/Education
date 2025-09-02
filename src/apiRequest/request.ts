@@ -11,3 +11,9 @@ export const myData = async () => {
 	console.log('My data', res);
 	return res
 }
+
+export const myLike = async () => {
+	const res = await getData(`liked/query?dey=10`)
+	console.log('My Like', res);
+	return res
+}

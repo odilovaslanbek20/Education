@@ -28,7 +28,8 @@ import { Label } from '../ui/label'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie'
+import { FaFastBackward } from "react-icons/fa";
 
 interface DataType {
 	data: DataMy
@@ -126,11 +127,11 @@ export default function EditUser({ data, token }: DataType) {
 	const deleteUser = async () => {
 		try {
 			await axios.delete(`${apiUrl}/users/${data?.data?.id}`, {
-        headers: {
-          Accept: "*/*",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+				headers: {
+					Accept: '*/*',
+					Authorization: `Bearer ${token}`,
+				},
+			})
 
 			toast.success(t('nice'))
 			Cookies.remove('accessToken')
@@ -174,16 +175,17 @@ export default function EditUser({ data, token }: DataType) {
 									alt='image placeholder'
 									width={500}
 									height={500}
-									className='w-[300px] h-[300px] object-center bg-cover'
+									quality={100}
+									className='w-[300px] h-[300px] object-cover'
 								/>
 							</Lens>
 
 							<div className='w-full flex items-center justify-center'>
 								<p
 									onClick={() => setOpenPhoto(true)}
-									className='text-[16px] font-medium text-blue-500 text-center mt-4 cursor-pointer w-[120px]'
+									className='text-[16px] font-medium text-blue-500 text-center mt-4 cursor-pointer w-auto'
 								>
-									Change photo
+									{t('update_photo')}
 								</p>
 							</div>
 
@@ -191,7 +193,7 @@ export default function EditUser({ data, token }: DataType) {
 								<DialogContent>
 									<BorderBeam />
 									<DialogHeader>
-										<DialogTitle>Update photo</DialogTitle>
+										<DialogTitle>{t('update_photo')}</DialogTitle>
 									</DialogHeader>
 									<form onSubmit={changePhoto}>
 										<div className='my-1'>
@@ -210,7 +212,9 @@ export default function EditUser({ data, token }: DataType) {
 										</Button>
 									</form>
 									<DialogFooter>
-										<Button>Close</Button>
+										<Button onClick={() => setOpenPhoto(false)}>
+											{t('close')}
+										</Button>
 									</DialogFooter>
 								</DialogContent>
 							</Dialog>
@@ -271,15 +275,20 @@ export default function EditUser({ data, token }: DataType) {
 					<SelectSeparator />
 
 					<CardFooter className='flex items-center justify-between max-sm:flex-col max-sm:gap-4'>
-						<CardTitle className='text-xl font-semibold max-sm:text-center'>
-							{t('delete_title')}
-						</CardTitle>
 						<Button
 							onClick={() => deleteUser()}
 							className='gap-1 bg-red-500 hover:bg-red-400 cursor-pointer w-[200px] max-sm:w-full'
 						>
 							<MdDeleteForever className='text-2xl' />
 							{t('delete')}
+						</Button>
+						<Button
+							variant='outline'
+							className='text-xl font-semibold max-sm:text-center max-sm:w-full'
+							onClick={() => router.back()}
+						>
+							<FaFastBackward/>
+							{t('back')}
 						</Button>
 					</CardFooter>
 				</Card>
@@ -351,7 +360,7 @@ export default function EditUser({ data, token }: DataType) {
 						</DialogHeader>
 
 						<DialogFooter>
-							<Button onClick={() => setOpen(false)}>Close</Button>
+							<Button onClick={() => setOpen(false)}>{t('close')}</Button>
 						</DialogFooter>
 					</DialogContent>
 				</Dialog>

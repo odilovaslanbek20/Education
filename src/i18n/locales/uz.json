@@ -28,8 +28,10 @@
 	"loading": "Yuklanmoqda...",
 	"edit": "Yangilash",
 	"my_account": "Mening akkauntim",
-	"delete_title": "Hisobni o‘chirish",
+	"back": "Ortga qaytish",
 	"delete": "O‘chirish",
 	"create": "Yaratish",
-	"update": "Yangilash"
+	"update": "Yangilash",
+	"close": "Yopish",
+	"update_photo": "Rasmni yangilash"
 }

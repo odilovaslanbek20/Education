@@ -69,6 +69,12 @@ export interface Reception {
   updatedAt: string
 }
 
+export interface likes {
+  id: number
+  centerId: number
+  userId: number
+}
+
 export interface Center {
   id: number
   name: string
@@ -84,7 +90,7 @@ export interface Center {
   region: Region
   filials: Filial[]
   comments: Comment[]
-  likes: []  
+  likes: likes[]
   receptions: Reception[]
 }
 
@@ -107,4 +113,19 @@ interface MyData {
 
 export interface DataMy {
   data: MyData
+}
+
+export interface Like {
+  id: number;
+  userId: number;
+  centerId: number;
+  createdAt: string; 
+  updatedAt: string;   
+  user: User1;
+  center: Center;
+}
+
+export interface LikeResponse {
+  data: Like[];
+  total: number;
 }

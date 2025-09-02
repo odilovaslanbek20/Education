@@ -15,6 +15,7 @@ import {
 } from 'react-icons/hi2'
 import { Admen } from '../Profile/User'
 import { VideoText } from '../magicui/video-text'
+import { DataMy } from '@/types/types'
 
 const navigation = [
 	{ name: 'home', href: '/' },
@@ -41,11 +42,13 @@ const ceoNavigation = [
 
 interface TokenType {
 	token: string | undefined
+	user: DataMy
 }
 
-export default function Navbar({ token }: TokenType) {
+export default function Navbar({ token, user }: TokenType) {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState<boolean>(false)
+	const [role, setRole] = useState<boolean>(false)
 	const [width, setWidth] = useState<number>(
 		typeof window !== 'undefined' ? window.innerWidth : 0
 	)
@@ -74,6 +77,16 @@ export default function Navbar({ token }: TokenType) {
 			setLogo(false)
 		}
 	}, [width])
+
+	useEffect(() => {
+		if (token || user) {
+			if (user?.data?.role === 'CEO') {
+				setRole(true)
+			} else {
+				setRole(false)
+			}
+		}
+	}, [token, user])
 
 	return (
 		<header className='w-full fixed top-0 left-0 z-40 p-3.5 max-[490px]:py-1.5 shadow-md border-b bg-background/80 backdrop-blur-md transition-colors'>
@@ -121,7 +134,7 @@ export default function Navbar({ token }: TokenType) {
 							<></>
 						)}
 
-						{token ? (
+						{role ? (
 							<>
 								<CeoPanelNav
 									ceoPanelNavigation={ceoPanelNavigation}
@@ -147,7 +160,7 @@ export default function Navbar({ token }: TokenType) {
 						</>
 					) : (
 						<>
-							<Admen />
+							<Admen user={user}/>
 						</>
 					)}
 					<button
@@ -198,7 +211,7 @@ export default function Navbar({ token }: TokenType) {
 								</li>
 							))}
 
-							{token ? (
+							{role ? (
 								<>
 									<CeoPanelNav
 										ceoPanelNavigation={ceoPanelNavigation}
@@ -220,9 +233,9 @@ export default function Navbar({ token }: TokenType) {
 							) : (
 								<></>
 							)}
-							<div className='w-full text-center border-2 p-1 rounded-[10px]'>
+							<div className='w-[270px] text-center border-2 p-1 rounded-[10px] absolute bottom-5'>
 								<p className='text-[15px] font-bold'>Foydalanuvchining roli:</p>
-								<p className='text-[18px] font-bold'>User</p>
+								<p className='text-[18px] font-bold'>{user?.data?.role}</p>
 							</div>
 						</ul>
 					</div>

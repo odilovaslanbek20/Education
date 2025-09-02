@@ -28,8 +28,10 @@
 	"loading": "Loading...",
 	"edit": "Edit",
 	"my_account": "Мy account",
-	"delete_title": "Delete account",
+	"back": "Go Back",
 	"delete": "Delete",
 	"create": "Create",
-	"update": "Update"
+	"update": "Update",
+	"close": "Close",
+	"update_photo": "Update photo"
 }
