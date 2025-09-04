@@ -33,5 +33,7 @@
 	"create": "Create",
 	"update": "Update",
 	"close": "Close",
-	"update_photo": "Update photo"
+	"update_photo": "Update photo",
+	"centerLiked": "Center has been added to your favorites",
+	"centerUnliked": "Center has been removed from your favorites"
 }

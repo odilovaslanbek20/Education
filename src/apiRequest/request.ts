@@ -13,7 +13,7 @@ export const myData = async () => {
 }
 
 export const myLike = async () => {
-	const res = await getData(`liked/query?dey=10`)
+	const res = await getData(`liked`)
 	console.log('My Like', res);
 	return res
 }

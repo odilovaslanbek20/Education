@@ -15,6 +15,9 @@ import { CentersResponse, LikeResponse } from '@/types/types'
 import { useTranslation } from '@/context/TranslationContext'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { toast } from 'react-toastify'
+import { GoHeart } from 'react-icons/go'
+import { IoHeartDislikeSharp } from 'react-icons/io5'
 
 interface DashboardProps {
 	data: CentersResponse
@@ -37,23 +40,37 @@ export default function Center({ data, token }: DashboardProps) {
 	}, [data])
 
 	const handleLike = async (id: number) => {
-		await axios.post(
-			`${apiUrl}/liked`,
-			{ centerId: id },
-			{
+		try {
+			await axios.post(
+				`${apiUrl}/liked`,
+				{ centerId: id },
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+
+			toast.success(t('centerLiked'))
+		} catch (err: unknown) {
+			console.log(err)
+			toast.error(t('error_API'))
+		}
+	}
+
+	const handleUnLike = async (likeId: number) => {
+		try {
+			await axios.delete(`${apiUrl}/liked/${likeId}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
-			}
-		)
-	}
+			})
 
-	const handleUnLike = async (id: number) => {
-		await axios.delete(`${apiUrl}/liked/${id}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		})
+			toast.success(t('centerUnliked'))
+		} catch (err: unknown) {
+			console.log(err)
+			toast.error(t('error_API'))
+		}
 	}
 
 	return (
@@ -108,24 +125,22 @@ export default function Center({ data, token }: DashboardProps) {
 								) ? (
 									<>
 										{item?.likes?.map(likeData => (
-											<Button
+											<div
 												key={likeData?.id}
-												variant='ghost'
-												className='flex items-center space-x-2 cursor-pointer'
 												onClick={() => handleUnLike(likeData?.id)}
+												className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center cursor-pointer'
 											>
-												<span>👎 Unlike</span>
-											</Button>
+												<IoHeartDislikeSharp className='text-[20px]' />
+											</div>
 										))}
 									</>
 								) : (
-									<Button
-										variant='ghost'
-										className='flex items-center space-x-2 cursor-pointer'
+									<div
 										onClick={() => handleLike(item?.id)}
+										className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center cursor-pointer'
 									>
-										<span>👍 Like</span>
-									</Button>
+										<GoHeart className='text-[20px]' />
+									</div>
 								)}
 							</CardFooter>
 						</Card>

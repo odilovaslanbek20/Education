@@ -33,5 +33,7 @@
 	"create": "Yaratish",
 	"update": "Yangilash",
 	"close": "Yopish",
-	"update_photo": "Rasmni yangilash"
+	"update_photo": "Rasmni yangilash",
+	"centerLiked": "Markaz sizning sevimlilaringizga qo‘shildi",
+	"centerUnliked": "Markaz sevimlilardan olib tashlandi"
 }
