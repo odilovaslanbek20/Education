@@ -18,6 +18,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { GoHeart } from 'react-icons/go'
 import { IoHeartDislikeSharp } from 'react-icons/io5'
+import Link from 'next/link'
 
 interface DashboardProps {
 	data: CentersResponse
@@ -116,9 +117,11 @@ export default function Center({ data, token }: DashboardProps) {
 								</CardDescription>
 							</CardContent>
 							<CardFooter className='flex justify-between items-center'>
-								<Button variant='default' className='cursor-pointer'>
-									{t('learnMore')}...
-								</Button>
+								<Link href={`/dashboard/centers/${item?.id}`}>
+									<Button variant='default' className='cursor-pointer'>
+										{t('learnMore')}...
+									</Button>
+								</Link>
 
 								{item?.likes?.some(
 									likeItem => likeItem?.centerId === item?.id

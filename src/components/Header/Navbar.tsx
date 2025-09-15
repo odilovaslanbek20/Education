@@ -149,7 +149,7 @@ export default function Navbar({ token, user }: TokenType) {
 
 				<div className='flex items-center gap-3'>
 					<LanguageSwitcher />
-					<AnimatedThemeToggler />
+					<AnimatedThemeToggler className='cursor-pointer'/>
 					{!token ? (
 						<>
 							<Link href='/login' className='cursor-pointer'>

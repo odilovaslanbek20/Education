@@ -43,7 +43,7 @@ export interface Filial {
   image: string
   createdAt: string
   updatedAt: string
-  region: Region
+  region: Region[]
 }
 
 export interface Comment {
@@ -96,6 +96,11 @@ export interface Center {
 
 export interface CentersResponse {
   data: Center[]
+  total: number
+}
+
+export interface CentersResponse1 {
+  data: Center
   total: number
 }
 

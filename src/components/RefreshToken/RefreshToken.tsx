@@ -3,7 +3,6 @@
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import { useTranslation } from '@/context/TranslationContext'
 
 export default function RefreshToken() {
@@ -19,10 +18,8 @@ export default function RefreshToken() {
 						refreshToken,
 					})
 					Cookies.set('accessToken', res.data.accessToken, { expires: 1 / 24 })
-					toast.success(t('nice'))
 				} catch (error: unknown) {
 					console.log(error)
-					toast.error(t('error_API'))
 				}
 			}
 		}, 10 * 60 * 1000)

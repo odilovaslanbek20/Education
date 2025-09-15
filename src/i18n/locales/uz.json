@@ -35,5 +35,8 @@
 	"close": "Yopish",
 	"update_photo": "Rasmni yangilash",
 	"centerLiked": "Markaz sizning sevimlilaringizga qo‘shildi",
-	"centerUnliked": "Markaz sevimlilardan olib tashlandi"
+	"centerUnliked": "Markaz sevimlilardan olib tashlandi",
+	"notFound_title": "Sahifa topilmadi",
+	"notFound_desc": "Siz izlayotgan sahifa mavjud emas yoki o‘chirilgan.",
+	"notFound_btn": "Asosiy sahifaga qaytish"
 }

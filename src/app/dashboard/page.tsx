@@ -1,6 +1,6 @@
 import { centers, myLike } from '@/apiRequest/request'
-import Center from '@/components/Centers/Centers'
 import { cookies } from 'next/headers'
+import Center from './centers/page'
 
 export default async function Dashboard() {
 	const cookieStore = await cookies()

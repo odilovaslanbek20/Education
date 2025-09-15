@@ -17,3 +17,15 @@ export const myLike = async () => {
 	console.log('My Like', res);
 	return res
 }
+
+export const centerDetails = async (id: string) => {
+	const res = await getData(`centers/${id}`)
+	console.log('Center Details', res.data);
+	return res
+}
+
+export const filials = async () => {
+	const res = await getData(`filials`)
+	console.log('Center filials', res);
+	return res
+}
