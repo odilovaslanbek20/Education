@@ -35,7 +35,7 @@ const ceoNavigation = [
 	},
 	{
 		name: 'ceoNewEdu',
-		href: '/createEdu',
+		href: '/dashboard/create',
 		icons: <HiOutlinePlusCircle className='text-lg' />,
 	},
 ]

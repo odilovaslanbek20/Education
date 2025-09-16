@@ -23,9 +23,3 @@ export const centerDetails = async (id: string) => {
 	console.log('Center Details', res.data);
 	return res
 }
-
-export const filials = async () => {
-	const res = await getData(`filials`)
-	console.log('Center filials', res);
-	return res
-}

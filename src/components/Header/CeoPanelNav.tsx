@@ -44,13 +44,14 @@ export default function CeoDropdown({ ceoPanelNavigation, ceoNavigation }: ceoDa
 					))}
 					<DropdownMenuContent className='w-56 mt-2 shadow-lg rounded-md border bg-white dark:bg-zinc-900'>
 						{ceoNavigation.map((item, idx) => (
+							<Link href={item.href} key={item.name || idx}>
 							<DropdownMenuItem
-								key={item.name || idx}
 								className='flex items-center gap-2 cursor-pointer'
 							>
 								{item.icons}
-								<Link href={item.href}>{t(item.name)}</Link>
+								{t(item.name)}
 							</DropdownMenuItem>
+							</Link>
 						))}
 					</DropdownMenuContent>
 				</DropdownMenu>
@@ -75,7 +76,6 @@ export default function CeoDropdown({ ceoPanelNavigation, ceoNavigation }: ceoDa
 				</button>
 			))}
 
-			{/* Mobile dropdown list */}
 			{open && (
 				<ul className='mt-2 space-y-2 px-4'>
 					{ceoNavigation.map((item, idx) => (
