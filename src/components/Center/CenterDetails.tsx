@@ -11,18 +11,31 @@ import { Label } from '../ui/label'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { useState } from 'react'
+import axios from 'axios'
 
 interface DashboardProps {
 	data: CentersResponse1
+	token: string | undefined
 }
 
-export default function CenterDetails({ data }: DashboardProps) {
+export default function CenterDetails({ data, token }: DashboardProps) {
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL
 	const [rating, setRating] = useState<number>(0)
+	const [text, setText] = useState<string>('')
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		// Handle form submission logic here
+
+		await axios.post(
+			`${apiUrl}/comments`,
+			{ star: rating, text, centerId: data?.data?.id },
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		)
 	}
 
 	return (
@@ -68,21 +81,25 @@ export default function CenterDetails({ data }: DashboardProps) {
 								<Label htmlFor='comments' className='mb-1.5 text-2xl'>
 									Comments
 								</Label>
-								<Textarea placeholder='Text' name='comments' />
-								<div className="flex items-center justify-between">
+								<Textarea
+									placeholder='Text'
+									name='comments'
+									onChange={e => setText(e.target.value)}
+								/>
+								<div className='flex items-center justify-between'>
 									<div className='flex justify-center mt-4 mb-4'>
-									{[1, 2, 3, 4, 5].map(star => (
-										<FaStar
-											key={star}
-											size={30}
-											onClick={() => setRating(star)}
-											className={`cursor-pointer transition-colors ${
-												star <= rating ? 'text-yellow-400' : 'text-gray-300'
-											}`}
-										/>
-									))}
-								</div>
-									<div className="">
+										{[1, 2, 3, 4, 5].map(star => (
+											<FaStar
+												key={star}
+												size={30}
+												onClick={() => setRating(star)}
+												className={`cursor-pointer transition-colors ${
+													star <= rating ? 'text-yellow-400' : 'text-gray-300'
+												}`}
+											/>
+										))}
+									</div>
+									<div className=''>
 										<Button className='mt-3'>Send</Button>
 									</div>
 								</div>
@@ -99,15 +116,18 @@ export default function CenterDetails({ data }: DashboardProps) {
 												src={`${apiUrl}/image/${comment?.user?.image}`}
 											/>
 											<AvatarFallback className='border'>
-												{comment?.user?.firstName?.[0]}{comment?.user?.lastName?.[0]}
+												{comment?.user?.firstName?.[0]}
+												{comment?.user?.lastName?.[0]}
 											</AvatarFallback>
 										</Avatar>
 										<div className=''>
 											<p className='text-[16px] font-semibold mb-2 flex items-center justify-between'>
-												{`${comment?.user?.firstName} ${comment?.user?.lastName}`} 
-												<div className="flex items-center">
+												{`${comment?.user?.firstName} ${comment?.user?.lastName}`}
+												<div className='flex items-center'>
 													<FaStar className=' ml-2 text-yellow-400' />
-													<span className='ml-1 text-sm text-gray-400'>{comment?.star}.0</span>
+													<span className='ml-1 text-sm text-gray-400'>
+														{comment?.star}.0
+													</span>
 												</div>
 											</p>
 											<p className='text-[14px] font-normal'>{comment?.text}</p>

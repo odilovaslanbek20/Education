@@ -51,13 +51,13 @@ export default function LoginPage() {
 
 			if (res.status === 200) {
 				Cookies.set('accessToken', res.data.accessToken, {
-					expires: 7, 
+					expires: 1, 
 					secure: true, 
 					sameSite: 'strict',
 				})
 
 				Cookies.set('refreshToken', res.data.refreshToken, {
-					expires: 7,
+					expires: 1,
 					secure: true,
 					sameSite: 'strict',
 				})

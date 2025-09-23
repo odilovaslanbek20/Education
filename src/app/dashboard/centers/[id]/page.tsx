@@ -1,5 +1,6 @@
 import { centerDetails } from '@/apiRequest/request'
 import CenterDetails from '@/components/Center/CenterDetails'
+import { cookies } from "next/headers"
 
 interface CenterProps {
   params: { id: string }
@@ -8,10 +9,12 @@ interface CenterProps {
 export default async function Details({ params }: CenterProps) {
   const { id } = params
 	const data = await centerDetails(id) 
+  const cookieStore = await cookies()
+	const token = cookieStore.get("accessToken")?.value
 
   return (
     <>
-		 <CenterDetails data={data}/>
+		 <CenterDetails data={data} token={token}/>
 		</>
   )
 }
