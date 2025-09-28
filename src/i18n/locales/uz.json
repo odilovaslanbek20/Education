@@ -46,5 +46,7 @@
 	"comment": "Izohlar",
 	"filials": "Filiallar",
 	"major": "Mavjud fanlar",
-	"data__error": "Ma'lumot topilmadi" 
+	"data__error": "Ma'lumot topilmadi",
+	"dars": "Darsga yozilish",
+	"delete_comment": "Izoh o'chirildi"
 }

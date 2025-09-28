@@ -46,5 +46,7 @@
 	"comment": "Comments",
 	"filials": "Branches",
 	"major": "Available subjects",
-	"data__error": "Data not found" 
+	"data__error": "Data not found",
+	"dars": "Enroll in a lesson",
+	"delete_comment": "Comment deleted"
 }

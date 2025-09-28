@@ -1,6 +1,6 @@
 'use client'
 
-import { CentersResponse1 } from '@/types/types'
+import { CentersResponse1, DataMy } from '@/types/types'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Lens } from '../magicui/lens'
 import Image from 'next/image'
@@ -14,18 +14,23 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useTranslation } from '@/context/TranslationContext'
 import { toast } from 'react-toastify'
+import { IoIosTimer } from 'react-icons/io'
+import { MdDelete, MdEdit } from 'react-icons/md'
+import Queue from '../Queue/Queue'
 
 interface DashboardProps {
 	data: CentersResponse1
 	token: string | undefined
+	myData: DataMy
 }
 
-export default function CenterDetails({ data, token }: DashboardProps) {
+export default function CenterDetails({ data, token, myData }: DashboardProps) {
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL
 	const { t } = useTranslation()
 	const [rating, setRating] = useState<number>(0)
 	const [text, setText] = useState<string>('')
 	const [loading, setLoading] = useState<boolean>(false)
+	const [selectedId, setSelectedId] = useState<string>('')
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -34,7 +39,7 @@ export default function CenterDetails({ data, token }: DashboardProps) {
 
 		if (rating === 0 || text.trim() === '') {
 			toast.error(t('comment_error') || 'Please provide a rating')
-			setLoading(false);
+			setLoading(false)
 			return
 		}
 
@@ -50,19 +55,43 @@ export default function CenterDetails({ data, token }: DashboardProps) {
 				}
 			)
 			toast.success(t('comment_success') || 'Comment added successfully')
-			setLoading(false);
+			setLoading(false)
 		} catch (err: unknown) {
-			setLoading(false);
-			console.log(err);
+			setLoading(false)
+			console.log(err)
 			toast.error(t('comment_error') || 'Error occurred while adding comment')
+		}
+	}
+
+	const handleEdite = (id: string) => {
+		if (id) {
+			setSelectedId(id)
+		} else {
+			toast.error('xatolik')
+		}
+	}
+
+	const handleDelet = (id: string) => {
+		try {
+			axios.delete(`${apiUrl}/comments/${id}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+
+			toast.success(t('delete_comment'))
+		} catch (err: unknown) {
+			console.log(err)
+			toast.error(t('error_API'))
 		}
 	}
 
 	return (
 		<section className='w-full py-10 bg-white dark:bg-black'>
+			{selectedId && <Queue id={selectedId} data={data} />}
 			<div className='web-container space-y-12'>
 				<Card className='overflow-hidden rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800'>
-					<div className='flex flex-col md:flex-row'>
+					<div className='flex items-start'>
 						<CardHeader className='pl-6 md:w-1/2'>
 							<Lens
 								zoomFactor={2}
@@ -80,65 +109,72 @@ export default function CenterDetails({ data, token }: DashboardProps) {
 								/>
 							</Lens>
 
-							<div className='mt-5'>
-								<p className='text-xl font-semibold mb-3'>{t('filials')}</p>
-								{data?.data?.filials?.length ? (
-									<div className='flex items-center gap-2 flex-wrap'>
-										{data?.data?.filials?.map(item => (
-											<div
-												className='bg-muted p-[10px] w-[200px] rounded-2xl flex items-center gap-2'
-												key={item?.id}
-											>
-												<Lens
-													zoomFactor={2}
-													lensSize={150}
-													isStatic={false}
-													ariaLabel='Zoom Area'
-												>
-													<Image
-														src={`${apiUrl}/image/${item?.image}`}
-														alt={item?.name || 'Image placeholder'}
-														width={200}
-														height={200}
-														quality={100}
-														className='w-[60px] h-[50px] rounded-full'
-													/>
-												</Lens>
+							<div className='max-h-[400px]'>
+								<Button className='w-full mt-5 cursor-pointer'>
+									<IoIosTimer />
+									{t('dars')}
+								</Button>
 
-												<div className=''>
-													<p className='text-lg font-semibold mt-2 line-clamp-1'>
+								<div className='mt-5'>
+									<p className='text-xl font-semibold mb-3'>{t('filials')}</p>
+									{data?.data?.filials?.length ? (
+										<div className='flex items-center gap-2 flex-wrap'>
+											{data?.data?.filials?.map(item => (
+												<div
+													className='bg-muted p-[10px] w-[200px] rounded-2xl flex items-center gap-2'
+													key={item?.id}
+												>
+													<Lens
+														zoomFactor={2}
+														lensSize={150}
+														isStatic={false}
+														ariaLabel='Zoom Area'
+													>
+														<Image
+															src={`${apiUrl}/image/${item?.image}`}
+															alt={item?.name || 'Image placeholder'}
+															width={200}
+															height={200}
+															quality={100}
+															className='w-[60px] h-[50px] rounded-full'
+														/>
+													</Lens>
+
+													<div className=''>
+														<p className='text-lg font-semibold mt-2 line-clamp-1'>
+															{item?.name}
+														</p>
+														<p className='text-sm text-gray-400 line-clamp-1'>
+															{item?.address}
+														</p>
+													</div>
+												</div>
+											))}
+										</div>
+									) : (
+										<p className='text-gray-400'>{t('data__error')}.</p>
+									)}
+								</div>
+
+								<div className='mt-5'>
+									<p className='text-xl font-semibold mb-3'>{t('major')}</p>
+									{data?.data?.majors?.length ? (
+										<div className='flex items-center gap-2 flex-wrap'>
+											{data?.data?.majors?.map(item => (
+												<div
+													className='bg-muted p-2 px-4 rounded-2xl'
+													key={item?.id}
+												>
+													<p className='text-md font-medium line-clamp-1'>
 														{item?.name}
 													</p>
-													<p className='text-sm text-gray-400 line-clamp-1'>
-														{item?.address}
-													</p>
 												</div>
-											</div>
-										))}
-									</div>
-								) : (
-									<p className='text-gray-400'>{t('data__error')}.</p>
-								)}
-							</div>
-
-							<div className='mt-5'>
-								<p className='text-xl font-semibold mb-3'>{t('major')}</p>
-								{data?.data?.majors?.length ? (
-									<div className='flex items-center gap-2 flex-wrap'>
-										{data?.data?.majors?.map(item => (
-											<div
-												className='bg-muted p-2 px-4 rounded-2xl'
-												key={item?.id}
-											>
-												<p className='text-md font-medium line-clamp-1'>
-													{item?.name}
-												</p>
-											</div>
-										))}
-									</div>
-								) : (
-									<p className='text-gray-400'>{t('data__error')}.</p>
-								)}
+											))}
+										</div>
+									) : (
+										<p className='text-gray-400'>{t('data__error')}.</p>
+									)}
+								</div>
 							</div>
 						</CardHeader>
 						<CardContent className='w-1/2'>
@@ -181,12 +217,14 @@ export default function CenterDetails({ data, token }: DashboardProps) {
 										))}
 									</div>
 									<div className=''>
-										<Button disabled={loading} className='mt-3'>{t('comment_btn')}</Button>
+										<Button disabled={loading} className='mt-3'>
+											{t('comment_btn')}
+										</Button>
 									</div>
 								</div>
 							</form>
 
-							<div className='max-h-[400px] overflow-y-auto pr-2'>
+							<div>
 								{data?.data?.comments?.map(comment => (
 									<div
 										className='mt-2 bg-muted rounded-[10px] p-2'
@@ -202,16 +240,28 @@ export default function CenterDetails({ data, token }: DashboardProps) {
 													{comment?.user?.lastName?.[0]}
 												</AvatarFallback>
 											</Avatar>
-											<div className=''>
-												<p className='text-[16px] font-semibold mb-2 flex items-center justify-between'>
-													{`${comment?.user?.firstName} ${comment?.user?.lastName}`}
+											<div className='w-full'>
+												<div className='w-full text-[16px] font-semibold mb-2 flex items-center justify-between'>
 													<div className='flex items-center'>
+														{`${comment?.user?.firstName} ${comment?.user?.lastName}`}
 														<FaStar className=' ml-2 text-yellow-400' />
 														<span className='ml-1 text-sm text-gray-400'>
 															{comment?.star}.0
 														</span>
 													</div>
-												</p>
+													{myData?.data?.id === comment?.userId && (
+														<div className='flex items-center gap-2'>
+															<MdEdit
+																onClick={() => handleEdite(String(comment?.id))}
+																className='cursor-pointer text-xl text-blue-500'
+															/>
+															<MdDelete
+																onClick={() => handleDelet(String(comment?.id))}
+																className='cursor-pointer text-xl text-red-500'
+															/>
+														</div>
+													)}
+												</div>
 												<p className='text-[14px] font-normal'>
 													{comment?.text}
 												</p>
