@@ -23,3 +23,15 @@ export const centerDetails = async (id: string) => {
 	console.log('Center Details', res.data);
 	return res
 }
+
+export const regions = async () => {
+	const res = await getData(`regions/search`)
+	console.log('Regions', res.data);
+	return res
+}
+
+export const major = async () => {
+	const res = await getData(`major`)
+	console.log('Regions', res.data);
+	return res
+}

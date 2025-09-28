@@ -38,5 +38,13 @@
 	"centerUnliked": "Markaz sevimlilardan olib tashlandi",
 	"notFound_title": "Sahifa topilmadi",
 	"notFound_desc": "Siz izlayotgan sahifa mavjud emas yoki o‘chirilgan.",
-	"notFound_btn": "Asosiy sahifaga qaytish"
+	"notFound_btn": "Asosiy sahifaga qaytish",
+	"comment_placeholder": "Izoh qoldiring...",
+	"comment_btn": "Yuborish",
+	"comment_success": "Izoh muvaffaqiyatli qo‘shildi",
+	"comment_error": "Izoh qo‘shishda xatolik yuz berdi. Qaytadan urinib ko‘ring.",
+	"comment": "Izohlar",
+	"filials": "Filiallar",
+	"major": "Mavjud fanlar",
+	"data__error": "Ma'lumot topilmadi" 
 }

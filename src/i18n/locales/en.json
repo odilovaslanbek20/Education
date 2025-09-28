@@ -37,6 +37,14 @@
 	"centerLiked": "Center has been added to your favorites",
 	"centerUnliked": "Center has been removed from your favorites",
 	"notFound_title": "Page not found",
-  "notFound_desc": "The page you are looking for does not exist or has been removed.",
-  "notFound_btn": "Back to Home"
+	"notFound_desc": "The page you are looking for does not exist or has been removed.",
+	"notFound_btn": "Back to Home",
+	"comment_placeholder": "Leave a comment...",
+	"comment_btn": "Submit",
+	"comment_success": "Comment added successfully",
+	"comment_error": "An error occurred while adding the comment. Please try again.",
+	"comment": "Comments",
+	"filials": "Branches",
+	"major": "Available subjects",
+	"data__error": "Data not found" 
 }
