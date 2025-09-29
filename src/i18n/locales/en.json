@@ -48,5 +48,8 @@
 	"major": "Available subjects",
 	"data__error": "Data not found",
 	"dars": "Enroll in a lesson",
-	"delete_comment": "Comment deleted"
+	"delete_comment": "Comment deleted",
+	"search_placeholder": "Search centers...",
+	"filter": "Filter",
+	"error_data": "Please try again or contact the administrator."
 }

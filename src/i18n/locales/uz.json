@@ -48,5 +48,8 @@
 	"major": "Mavjud fanlar",
 	"data__error": "Ma'lumot topilmadi",
 	"dars": "Darsga yozilish",
-	"delete_comment": "Izoh o'chirildi"
+	"delete_comment": "Izoh o'chirildi",
+	"search_placeholder": "Markazlarni qidirish...",
+	"filter": "Filtr",
+	"error_data": "Iltimos, qayta urinib ko‘ring yoki administrator bilan bog‘laning."
 }

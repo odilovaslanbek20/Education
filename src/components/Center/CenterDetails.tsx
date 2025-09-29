@@ -88,7 +88,7 @@ export default function CenterDetails({ data, token, myData }: DashboardProps) {
 
 	return (
 		<section className='w-full py-10 bg-white dark:bg-black'>
-			{selectedId && <Queue id={selectedId} data={data} />}
+			{selectedId && <Queue id={selectedId} />}
 			<div className='web-container space-y-12'>
 				<Card className='overflow-hidden rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-800'>
 					<div className='flex items-start'>
