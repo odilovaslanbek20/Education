@@ -32,6 +32,9 @@ export default function Center({ data, token }: DashboardProps) {
 	const { t } = useTranslation()
 	const [dataLength, setDataLength] = useState<boolean>(true)
 	const [search, setSearch] = useState<string>('')
+	const [centers, setCenters] = useState<CentersResponse['data']>(
+		data?.data || []
+	)
 
 	useEffect(() => {
 		if (data) {
@@ -45,39 +48,51 @@ export default function Center({ data, token }: DashboardProps) {
 
 	const handleLike = async (id: number) => {
 		try {
-			await axios.post(
+			const res = await axios.post(
 				`${apiUrl}/liked`,
 				{ centerId: id },
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
+				{ headers: { Authorization: `Bearer ${token}` } }
+			)
+
+			const newLike = res.data
+
+			setCenters(prev =>
+				prev.map(center =>
+					center.id === id
+						? { ...center, likes: [...center.likes, newLike] }
+						: center
+				)
 			)
 
 			toast.success(t('centerLiked'))
-		} catch (err: unknown) {
+		} catch (err) {
 			console.log(err)
 			toast.error(t('error_API'))
 		}
 	}
 
-	const handleUnLike = async (likeId: number) => {
+	const handleUnLike = async (likeId: number, centerId: number) => {
 		try {
 			await axios.delete(`${apiUrl}/liked/${likeId}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
+				headers: { Authorization: `Bearer ${token}` },
 			})
 
+			setCenters(prev =>
+				prev.map(center =>
+					center.id === centerId
+						? { ...center, likes: center.likes.filter(l => l.id !== likeId) }
+						: center
+				)
+			)
+
 			toast.success(t('centerUnliked'))
-		} catch (err: unknown) {
+		} catch (err) {
 			console.log(err)
 			toast.error(t('error_API'))
 		}
 	}
 
-	const filteredData = data?.data?.filter(
+	const filteredData = centers?.filter(
 		item =>
 			item?.name.toLowerCase().includes(search.toLowerCase()) ||
 			item?.address.toLowerCase().includes(search.toLowerCase())
@@ -147,23 +162,23 @@ export default function Center({ data, token }: DashboardProps) {
 									</Link>
 
 									{item?.likes?.some(
-										likeItem => likeItem?.centerId === item?.id
+										likeItem => likeItem?.id === item?.id
 									) ? (
-										<>
-											{item?.likes?.map(likeData => (
-												<div
-													key={likeData?.id}
-													onClick={() => handleUnLike(likeData?.id)}
-													className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center cursor-pointer'
-												>
-													<IoHeartDislikeSharp className='text-[20px]' />
-												</div>
-											))}
-										</>
+										<div
+											onClick={() => {
+												const currentLike = item?.likes?.find(
+													likeItem => likeItem.userId === item?.id
+												)
+												if (currentLike) handleUnLike(currentLike.id, item.id)
+											}}
+											className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center cursor-pointer bg-red-100 hover:bg-red-200'
+										>
+											<IoHeartDislikeSharp className='text-[20px] text-red-600' />
+										</div>
 									) : (
 										<div
 											onClick={() => handleLike(item?.id)}
-											className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center cursor-pointer'
+											className='w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-100'
 										>
 											<GoHeart className='text-[20px]' />
 										</div>
